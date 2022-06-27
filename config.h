@@ -64,6 +64,7 @@ static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() 
 static const char *dmenucmd[]      = { "dmenu_run", "-m", dmenumon, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]       = { "st", NULL };
 static const char *lockcmd[]       = { "slock", NULL };
+static const char *sysstatcmd[]       = { "sysstat", NULL };
 static const char *brightinccmd[]  = { "brightnessctl", "set", "+5%", NULL };
 static const char *brightdeccmd[]  = { "brightnessctl", "set", "5%-", NULL };
 static const char *volupcmd[]     = { "volume", "up", NULL };
@@ -93,9 +94,13 @@ ResourcePref resources[] = {
 };
 
 #define STCMD(cmd) {.v = (const char*[]){ "st", "-e", cmd, NULL }}
+#define STACKKEYS(MOD,ACTION) \
+	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
+	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } },
 
 static Key keys[] = {
 	/* modifier			key	   function	   argument */
+	{ MODKEY,			XK_grave,   spawn,	   {.v = sysstatcmd } },
 	{ MODKEY,			XK_d,	   spawn,	   {.v = dmenucmd } },
 	{ MODKEY,			XK_Return, spawn,	   {.v = termcmd } },
 	{ MODKEY,			XK_x,	   spawn,	   {.v = lockcmd } },
@@ -112,11 +117,15 @@ static Key keys[] = {
 	{ MODKEY|ShiftMask,		XK_semicolon,	spawn,	   {.v = mpcprecmd } },
 	{ MODKEY,			XK_p,		spawn,	   {.v = mpctogcmd } },
 
-	{ MODKEY,			XK_b,	   togglebar,	   {0} },
-	{ MODKEY,			XK_j,	   focusstack,	   {.i = +1 } },
-	{ MODKEY,			XK_k,	   focusstack,	   {.i = -1 } },
+	{ MODKEY,			XK_b,		togglebar, {0} },
+	STACKKEYS(MODKEY,				focus)
+	STACKKEYS(MODKEY|ShiftMask,			push)
+	{ MODKEY|ShiftMask,		XK_h,		pushstack, {.i = 0 } },
+	{ MODKEY|ShiftMask,		XK_l,		pushstack, {.i = -1 } },
+	{ MODKEY|Mod1Mask,		XK_h,		focusstack,{.i = 0 } },
+	{ MODKEY|Mod1Mask,		XK_l,		focusstack,{.i = -1 } },
 	{ MODKEY,			XK_i,	   incnmaster,	   {.i = +1 } },
-	{ MODKEY,			XK_d,	   incnmaster,	   {.i = -1 } },
+	{ MODKEY|ShiftMask,		XK_i,	   incnmaster,	   {.i = -1 } },
 	{ MODKEY,			XK_h,	   setmfact,	   {.f = -0.05} },
 	{ MODKEY,			XK_l,	   setmfact,	   {.f = +0.05} },
 

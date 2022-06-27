@@ -105,13 +105,13 @@ static Key keys[] = {
 	{ MODKEY,			XK_Return, spawn,	   {.v = termcmd } },
 	{ MODKEY,			XK_x,	   spawn,	   {.v = lockcmd } },
 	{ MODKEY,			XK_e,	   spawn,	   STCMD("aerc") },
-	{ MODKEY,			XK_n,	   spawn,	   STCMD("ncmpcpp") },
-	{ MODKEY,			XK_m,	   spawn,	   STCMD("newsboat") },
+	{ MODKEY,			XK_m,	   spawn,	   STCMD("ncmpcpp") },
+	{ MODKEY,			XK_n,	   spawn,	   STCMD("newsboat") },
 
 	{ MODKEY,			XK_slash,	spawn,	   {.v = brightinccmd } },
 	{ MODKEY|ShiftMask,		XK_slash,	spawn,	   {.v = brightdeccmd } },
-	{ MODKEY,			XK_bracketright,spawn,	   {.v = voldncmd } },
-	{ MODKEY,			XK_bracketleft,	spawn,	   {.v = volupcmd } },
+	{ MODKEY,			XK_bracketleft,	spawn,	   {.v = voldncmd } },
+	{ MODKEY,			XK_bracketright,spawn,	   {.v = volupcmd } },
 
 	{ MODKEY,			XK_semicolon,	spawn,	   {.v = mpcnexcmd } },
 	{ MODKEY|ShiftMask,		XK_semicolon,	spawn,	   {.v = mpcprecmd } },

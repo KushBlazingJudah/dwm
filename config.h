@@ -14,7 +14,7 @@ static char normfgcolor[]	    = "#bbbbbb";
 static char selfgcolor[]	    = "#eeeeee";
 static char selbordercolor[]	    = "#005577";
 static char selbgcolor[]	    = "#005577";
-static char *colors[][3] = {
+static const char *colors[][3] = {
        /*		fg	     bg		  border   */
        [SchemeNorm] = { normfgcolor, normbgcolor, normbordercolor },
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
@@ -74,26 +74,6 @@ static const char *volmtcmd[]     = { "volume", "mute", NULL };
 static const char *mpctogcmd[]     = { "mpc", "toggle", NULL };
 static const char *mpcnexcmd[]     = { "mpc", "next", NULL };
 static const char *mpcprecmd[]     = { "mpc", "prev", NULL };
-
-/*
- * Xresources preferences to load at startup
- */
-ResourcePref resources[] = {
-	{ "font",		STRING,  &font },
-	{ "normbgcolor",	STRING,  &normbgcolor },
-	{ "normbordercolor",	STRING,  &normbordercolor },
-	{ "normfgcolor",	STRING,  &normfgcolor },
-	{ "selbgcolor",		STRING,  &selbgcolor },
-	{ "selbordercolor",	STRING,  &selbordercolor },
-	{ "selfgcolor",		STRING,  &selfgcolor },
-	{ "borderpx",		INTEGER, &borderpx },
-	{ "snap",		INTEGER, &snap },
-	{ "showbar",		INTEGER, &showbar },
-	{ "topbar",		INTEGER, &topbar },
-	{ "nmaster",		INTEGER, &nmaster },
-	{ "resizehints",	INTEGER, &resizehints },
-	{ "mfact",		FLOAT,	 &mfact },
-};
 
 #define STCMD(cmd) {.v = (const char*[]){ "st", "-e", cmd, NULL }}
 #define STACKKEYS(MOD,ACTION) \

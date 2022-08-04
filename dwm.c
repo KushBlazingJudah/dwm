@@ -747,7 +747,7 @@ createmon(void)
 	m->nmaster = nmaster;
 	m->showbar = showbar;
 	m->topbar = topbar;
-	m->lt[0] = &layouts[0];
+	m->lt[0] = &layouts[deflayout];
 	m->lt[1] = &layouts[1 % LENGTH(layouts)];
 	strncpy(m->ltsymbol, layouts[0].symbol, sizeof m->ltsymbol);
 	return m;
@@ -2526,10 +2526,18 @@ load_xresources(void)
 int
 main(int argc, char *argv[])
 {
-	if (argc == 2 && !strcmp("-v", argv[1]))
-		die("dwm-"VERSION);
-	else if (argc != 1)
-		die("usage: dwm [-v]");
+	int opt;
+	while ((opt = getopt(argc, argv, "9v")) != -1) {
+		switch(opt) {
+		case '9':
+			showbar = 0;
+			borderpx = 4;
+			deflayout = 4;
+			break;
+		case 'v': die("wsj-dwm-"VERSION);
+		}
+	}
+
 	if (!setlocale(LC_CTYPE, "") || !XSupportsLocale())
 		fputs("warning: no locale support\n", stderr);
 	if (!(dpy = XOpenDisplay(NULL)))

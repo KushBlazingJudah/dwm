@@ -42,6 +42,7 @@ static int resizehints = 1;    /* 1 means respect size hints in tiled resizals *
 static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 #include "fibonacci.c"
+static int deflayout = 0;
 static const Layout layouts[] = {
 	/* symbol     arrange function */
 	{ "[\\]",      dwindle },
@@ -69,6 +70,7 @@ static const char *brightinccmd[]  = { "brightnessctl", "set", "+5%", NULL };
 static const char *brightdeccmd[]  = { "brightnessctl", "set", "5%-", NULL };
 static const char *volupcmd[]     = { "volume", "up", NULL };
 static const char *voldncmd[]     = { "volume", "down", NULL };
+static const char *volmtcmd[]     = { "volume", "mute", NULL };
 static const char *mpctogcmd[]     = { "mpc", "toggle", NULL };
 static const char *mpcnexcmd[]     = { "mpc", "next", NULL };
 static const char *mpcprecmd[]     = { "mpc", "prev", NULL };
@@ -110,6 +112,7 @@ static Key keys[] = {
 
 	{ MODKEY,			XK_slash,	spawn,	   {.v = brightinccmd } },
 	{ MODKEY|ShiftMask,		XK_slash,	spawn,	   {.v = brightdeccmd } },
+	{ MODKEY,			XK_backslash,	spawn,	   {.v = volmtcmd } },
 	{ MODKEY,			XK_bracketleft,	spawn,	   {.v = voldncmd } },
 	{ MODKEY,			XK_bracketright,spawn,	   {.v = volupcmd } },
 

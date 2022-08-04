@@ -2235,8 +2235,11 @@ updatesizehints(Client *c)
 void
 updatestatus(void)
 {
-	if (!gettextprop(root, XA_WM_NAME, stext, sizeof(stext)))
+	char text[256];
+	if (!gettextprop(root, XA_WM_NAME, text, sizeof(stext)))
 		strcpy(stext, "dwm-"VERSION);
+	if (!strncmp(text, "xrdb", 4)) xrdb(NULL);
+	else strncpy(stext, text, 256);
 	drawbar(selmon);
 }
 

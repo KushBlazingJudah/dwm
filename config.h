@@ -20,6 +20,8 @@ static char *colors[][3] = {
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 
+static int nine = 0;
+
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -62,18 +64,20 @@ static const Layout layouts[] = {
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static char st9[]       = "st9";
 static const char *dmenucmd[]      = { "dmenu_run", "-m", dmenumon, "-nb", normbgcolor, "-nf", normfgcolor, "-sb", selbordercolor, "-sf", selfgcolor, NULL };
 static const char *termcmd[]       = { "st", NULL };
 static const char *lockcmd[]       = { "slock", NULL };
 static const char *sysstatcmd[]       = { "sysstat", NULL };
-static const char *brightinccmd[]  = { "brightnessctl", "set", "+5%", NULL };
-static const char *brightdeccmd[]  = { "brightnessctl", "set", "5%-", NULL };
+static const char *brightinccmd[]  = { "brightness", "up", NULL };
+static const char *brightdeccmd[]  = { "brightness", "down", NULL };
 static const char *volupcmd[]     = { "volume", "up", NULL };
 static const char *voldncmd[]     = { "volume", "down", NULL };
 static const char *volmtcmd[]     = { "volume", "mute", NULL };
 static const char *mpctogcmd[]     = { "mpc", "toggle", NULL };
 static const char *mpcnexcmd[]     = { "mpc", "next", NULL };
 static const char *mpcprecmd[]     = { "mpc", "prev", NULL };
+static const char *rootmenucmd[]     = { "xrootmenu", NULL };
 
 #define STCMD(cmd) {.v = (const char*[]){ "st", "-e", cmd, NULL }}
 #define STACKKEYS(MOD,ACTION) \
@@ -160,5 +164,6 @@ static Button buttons[] = {
 	{ ClkTagBar,		0,		Button3,	toggleview,	{0} },
 	{ ClkTagBar,		MODKEY,		Button1,	tag,		{0} },
 	{ ClkTagBar,		MODKEY,		Button3,	toggletag,	{0} },
+	{ ClkRootWin,		0,		Button3,	spawn,		{.v = rootmenucmd} },
 };
 

@@ -1827,6 +1827,8 @@ spawn(const Arg *arg)
 	if (fork() == 0) {
 		if (dpy)
 			close(ConnectionNumber(dpy));
+		if (nine && !strcmp(((char **)arg->v)[0], "st"))
+			((char **)arg->v)[0] = st9;
 		setsid();
 		execvp(((char **)arg->v)[0], (char **)arg->v);
 		fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]);
@@ -2526,6 +2528,7 @@ main(int argc, char *argv[])
 			showbar = 0;
 			borderpx = 4;
 			deflayout = 4;
+			nine = 1;
 			break;
 		case 'v': die("wsj-dwm-"VERSION);
 		}

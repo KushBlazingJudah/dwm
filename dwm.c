@@ -173,6 +173,11 @@ typedef struct {
 	int monitor;
 } Rule;
 
+struct swtch_t {
+	const char* c;
+	const char** l;
+};
+
 /* function declarations */
 static void applyrules(Client *c);
 static int applysizehints(Client *c, int *x, int *y, int *w, int *h, int interact);
@@ -244,6 +249,7 @@ static void sigchld(int unused);
 static int solitary(Client *c);
 static void spawn(const Arg *arg);
 static int stackpos(const Arg *arg);
+static void swtch(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *);
@@ -314,6 +320,7 @@ static Display *dpy;
 static Drw *drw;
 static Monitor *mons, *selmon;
 static Window root, wmcheckwin;
+static int nine = 0;
 
 static xcb_connection_t *xcon;
 
@@ -2516,6 +2523,52 @@ zoom(const Arg *arg)
 		if (!c || !(c = nexttiled(c->next)))
 			return;
 	pop(c);
+}
+
+void
+swtch(const Arg *arg)
+{
+	struct swtch_t *s = (struct swtch_t *)arg->v;
+	Client *c;
+
+	// Look through all clients for a matching client.
+	for(c = selmon->clients; c; c=c->next) {
+		// We look at the class to determine if this is the
+		// right one or not.
+		XClassHint ch = { NULL, NULL };
+		XGetClassHint(dpy, c->win, &ch);
+
+		// We never use it
+		if (ch.res_name)
+			XFree(ch.res_name);
+
+		const char *class = ch.res_class ? ch.res_class : broken;
+		if (strstr(class, s->c)) { // See applyrules.
+			// switch to tag
+			if ((c->tags & TAGMASK) != selmon->tagset[selmon->seltags]) {
+				// Dunno what this does but it's done in view
+				selmon->seltags ^= 1; /* toggle sel tagset */
+				if (c->tags & TAGMASK)
+					selmon->tagset[selmon->seltags] = c->tags & TAGMASK;
+				arrange(selmon);
+			}
+
+			focus(c); // focus client
+
+			// Since we found it, we can clean up now and leave
+			if (ch.res_class)
+				XFree(ch.res_class);
+			return;
+		}
+
+		if (ch.res_class)
+			XFree(ch.res_class);
+	}
+
+	// We didn't find a matching client.
+	// Spawn it ourselves.
+	const Arg a = { .v = s->l };
+	spawn(&a);
 }
 
 int

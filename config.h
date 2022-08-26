@@ -20,8 +20,6 @@ static char *colors[][3] = {
        [SchemeSel]  = { selfgcolor,  selbgcolor,  selbordercolor  },
 };
 
-static int nine = 0;
-
 /* tagging */
 static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
@@ -80,26 +78,33 @@ static const char *mpcprecmd[]     = { "mpc", "prev", NULL };
 static const char *rootmenucmd[]     = { "xrootmenu", NULL };
 
 #define STCMD(cmd) {.v = (const char*[]){ "st", "-e", cmd, NULL }}
+#define SWTCHCMD(cl, cmd) {.v = &(const struct swtch_t){.c = cl, .l = (const char*[]){cmd}}}
+#define SWTCHSTCMD(cl, cmd) {.v = &(const struct swtch_t){.c = cl, .l = (const char*[]){"st", "-c", cl, "-e", cmd, NULL }}}
 #define STACKKEYS(MOD,ACTION) \
 	{ MOD, XK_j,     ACTION##stack, {.i = INC(+1) } }, \
 	{ MOD, XK_k,     ACTION##stack, {.i = INC(-1) } },
 
 static Key keys[] = {
 	/* modifier			key	   function	   argument */
-	{ MODKEY,			XK_grave,   spawn,	   {.v = sysstatcmd } },
+
+	/* Programs */
+	{ MODKEY,			XK_grave,  spawn,	   {.v = sysstatcmd } },
 	{ MODKEY,			XK_d,	   spawn,	   {.v = dmenucmd } },
 	{ MODKEY,			XK_Return, spawn,	   {.v = termcmd } },
 	{ MODKEY,			XK_x,	   spawn,	   {.v = lockcmd } },
-	{ MODKEY,			XK_e,	   spawn,	   STCMD("aerc") },
-	{ MODKEY,			XK_m,	   spawn,	   STCMD("ncmpcpp") },
-	{ MODKEY,			XK_n,	   spawn,	   STCMD("newsboat") },
+	{ MODKEY,			XK_w,      swtch,	   SWTCHSTCMD("weechat", "weechat") },
+	{ MODKEY|ShiftMask,		XK_w,      swtch,	   SWTCHCMD("firefox", "web") },
+	{ MODKEY,			XK_e,	   swtch,	   SWTCHSTCMD("vim", "nvim") },
+	{ MODKEY,			XK_n,	   swtch,	   SWTCHSTCMD("newsboat", "newsboat") },
+	{ MODKEY|ShiftMask,		XK_m,	   swtch,	   SWTCHSTCMD("aerc", "aerc") },
+	{ MODKEY,			XK_m,	   swtch,	   SWTCHSTCMD("ncmpcpp", "ncmpcpp") },
 
+	/* Utils */
 	{ MODKEY,			XK_slash,	spawn,	   {.v = brightinccmd } },
 	{ MODKEY|ShiftMask,		XK_slash,	spawn,	   {.v = brightdeccmd } },
 	{ MODKEY,			XK_backslash,	spawn,	   {.v = volmtcmd } },
 	{ MODKEY,			XK_bracketleft,	spawn,	   {.v = voldncmd } },
 	{ MODKEY,			XK_bracketright,spawn,	   {.v = volupcmd } },
-
 	{ MODKEY,			XK_semicolon,	spawn,	   {.v = mpcnexcmd } },
 	{ MODKEY|ShiftMask,		XK_semicolon,	spawn,	   {.v = mpcprecmd } },
 	{ MODKEY,			XK_p,		spawn,	   {.v = mpctogcmd } },
